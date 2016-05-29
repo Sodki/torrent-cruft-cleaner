@@ -87,26 +87,32 @@ for root, subFolders, files in os.walk(args.directory):
     for file in files:
         directory_files.append(os.path.relpath(os.path.join(root, file), args.directory))
 
+# build comparison lists
+
+extra_local_files = sorted(list(set(directory_files).difference(set(torrent_files))))
+extra_torrent_files = sorted(list(set(torrent_files).difference(set(directory_files))))
+
 # show files in directory that aren't listed in the torrent file
 
 if not args.quiet and not args.delete:
-    print "*** files that can be deleted because they're not listed in the torrent files ***"
-    for f in sorted(list(set(directory_files).difference(set(torrent_files)))):
-        print f
+    if extra_local_files:
+        print "*** files that can be deleted because they're not listed in the torrent files ***"
+        for f in extra_local_files:
+            print f
 
 # show files in torrent that are missing in the directory
 
 if not args.quiet and not args.delete:
-    print "*** files that are listed in the torrent files, but are not in the directory ***"
-    for f in sorted(list(set(torrent_files).difference(set(directory_files)))):
-        print f
+    if extra_torrent_files:
+        print "*** files that are listed in the torrent files, but are not in the directory ***"
+        for f in extra_torrent_files:
+            print f
 
 # delete files that are not listed in the torrent files
 
 if args.delete:
-    for f in sorted(list(set(directory_files).difference(set(torrent_files)))):
+    for f in extra_local_files:
         p = os.path.join(args.directory, f)
         if not args.quiet:
             print "deleting: %s" % p
         os.remove(p)
-
