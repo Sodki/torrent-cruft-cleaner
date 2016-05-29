@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-# released by Henrique Rodrigues in 2012 as public domain
-
 import re
 import sys
 import os
