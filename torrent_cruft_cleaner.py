@@ -91,20 +91,20 @@ for root, subFolders, files in os.walk(args.directory):
 
 if not args.quiet and not args.delete:
     print "*** files that can be deleted because they're not listed in the torrent files ***"
-    for f in list(set(directory_files).difference(set(torrent_files))):
+    for f in sorted(list(set(directory_files).difference(set(torrent_files)))):
         print f
 
 # show files in torrent that are missing in the directory
 
 if not args.quiet and not args.delete:
     print "*** files that are listed in the torrent files, but are not in the directory ***"
-    for f in list(set(torrent_files).difference(set(directory_files))):
+    for f in sorted(list(set(torrent_files).difference(set(directory_files)))):
         print f
 
 # delete files that are not listed in the torrent files
 
 if args.delete:
-    for f in list(set(directory_files).difference(set(torrent_files))):
+    for f in sorted(list(set(directory_files).difference(set(torrent_files)))):
         p = os.path.join(args.directory, f)
         if not args.quiet:
             print "deleting: %s" % p
